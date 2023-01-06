@@ -1,9 +1,11 @@
 import 'package:bitsdojo_window/bitsdojo_window.dart';
+import 'package:dart_vlc/dart_vlc.dart';
 import 'package:flutter/material.dart';
 import 'package:spiccato/pages/main_page/main_page.dart';
 import 'package:spiccato/utils/theme.dart';
 
 void main() {
+  DartVLC.initialize();
   runApp(const MyApp());
   doWhenWindowReady(() {
     const initialSize = Size(800, 650);
