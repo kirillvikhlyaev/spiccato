@@ -51,14 +51,18 @@ class PlayerProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void setCurrentTrack(Track track) {
+  void setCurrentTrack(Track track, [bool autoStart = false]) {
     if (_isPlaying) {
       _isPlaying = false;
       player.stop();
     }
 
     _currentTrack = track;
-    player.open(Media.file(File(_currentTrack!.path)), autoStart: false);
+
+    player.open(Media.file(File(_currentTrack!.path)), autoStart: autoStart);
+    if (autoStart) {
+      _isPlaying = true;
+    }
     notifyListeners();
   }
 
@@ -80,6 +84,14 @@ class PlayerProvider with ChangeNotifier {
   void _getTime() {
     currentDurationTime = player.position.duration!;
     currentPositionTime = player.position.position!;
+
+    if (currentPositionTime >= currentDurationTime - Duration(seconds: 2)) {
+      if (playlist.indexOf(_currentTrack!) != playlist.length - 1) {
+        setCurrentTrack(playlist[playlist.indexOf(_currentTrack!) + 1], true);
+      } else {
+        setCurrentTrack(playlist.first, true);
+      }
+    }
 
     notifyListeners();
   }
