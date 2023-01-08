@@ -4,7 +4,9 @@ import 'package:dart_vlc/dart_vlc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:provider/provider.dart';
 import 'package:spiccato/models/track.dart';
+import 'package:spiccato/provider/player_provider.dart';
 import 'package:spiccato/utils/palette.dart';
 
 class TrackTile extends StatefulWidget {
@@ -27,7 +29,7 @@ class _TrackTileState extends State<TrackTile> {
         onHover = !onHover;
       }),
       hoverColor: Palette.background700,
-      onTap: () {},
+      onTap: () => context.read<PlayerProvider>().setCurrentTrack(widget.track),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -54,12 +56,12 @@ class _TrackTileState extends State<TrackTile> {
                         style: const TextStyle(color: Palette.white, fontFamily: 'IBM'),
                       )),
                 ),
-                SizedBox(
-                    width: 50,
-                    child: Text(
-                      '${widget.track.time.inSeconds}',
-                      style: const TextStyle(color: Palette.white, fontFamily: 'IBM'),
-                    )),
+                // SizedBox(
+                //     width: 50,
+                //     child: Text(
+                //       '${widget.track.time.inSeconds}',
+                //       style: const TextStyle(color: Palette.white, fontFamily: 'IBM'),
+                //     )),
               ],
             ),
           ),
@@ -69,21 +71,21 @@ class _TrackTileState extends State<TrackTile> {
               children: [
                 TrackControlButton(
                     onTap: () => print(''),
-                    icon: const Icon(
-                      Icons.favorite_border_outlined,
-                      color: Palette.white,
+                    icon: Icon(
+                      Icons.star_border_outlined,
+                      color: Palette.white.withOpacity(0.7),
                     )),
                 TrackControlButton(
                     onTap: () => print(''),
-                    icon: const Icon(
+                    icon: Icon(
                       Icons.playlist_add,
-                      color: Palette.white,
+                      color: Palette.white.withOpacity(0.7),
                     )),
                 TrackControlButton(
-                    onTap: () => print(''),
-                    icon: const Icon(
+                    onTap: () => context.read<PlayerProvider>().removeFromPlaylist(widget.track),
+                    icon: Icon(
                       Icons.remove,
-                      color: Palette.white,
+                      color: Palette.white.withOpacity(0.7),
                     ))
               ],
             ),

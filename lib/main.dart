@@ -1,7 +1,9 @@
 import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:dart_vlc/dart_vlc.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:spiccato/pages/main_page/main_page.dart';
+import 'package:spiccato/provider/player_provider.dart';
 import 'package:spiccato/utils/theme.dart';
 
 void main() {
@@ -26,7 +28,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Spiccato',
       theme: AppThemes.light,
-      home: MainPage(),
+      home: ChangeNotifierProvider<PlayerProvider>(create: (context) => PlayerProvider(), child: MainPage()),
     );
   }
 }

@@ -1,19 +1,24 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'dart:io';
+
+import 'package:dart_vlc/dart_vlc.dart';
+
 class Track {
-  final String name;
-  final String author;
-  final Duration time;
+  String name;
+  String author;
   final String path;
 
   Track({
-    required this.name,
-    required this.author,
-    required this.time,
+    this.name = '',
+    this.author = '',
     required this.path,
-  });
+  }) {
+    name = Media.file(File(path), parse: true).metas['title'] ?? 'Unknown';
+    author = Media.file(File(path), parse: true).metas['artist'] ?? 'Unknown';
+  }
 
-  Track.temp({this.name = 'God`s Plan', this.author = 'Drake', this.time = Duration.zero, this.path = ''});
+  Track.temp({this.name = 'God`s Plan', this.author = 'Drake', this.path = ''});
 
   @override
-  String toString() => 'Track(name: $name, author: $author, time: $time)';
+  String toString() => 'Track(name: $name, author: $author)';
 }

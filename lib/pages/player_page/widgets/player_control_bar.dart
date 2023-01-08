@@ -5,35 +5,32 @@ import 'package:flutter/material.dart';
 import 'package:spiccato/models/track.dart';
 import 'package:spiccato/utils/palette.dart';
 
-class PlayerControlBar extends StatefulWidget {
-  const PlayerControlBar({super.key, required this.player, required this.track});
+class PlayerControlBar extends StatelessWidget {
+  PlayerControlBar({super.key, required this.player, required this.track});
 
   final Player player;
-  final Track track;
+  final Track? track;
 
-  @override
-  State<PlayerControlBar> createState() => _PlayerControlBarState();
-}
-
-class _PlayerControlBarState extends State<PlayerControlBar> {
   bool isPlaying = false;
   double sliderValue = 0;
 
-  @override
-  void initState() {
-    super.initState();
-    widget.player.open(Media.file(File(widget.track.path)), autoStart: false);
-  }
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   if (widget.track != null) {
+  //     widget.player.open(Media.file(File(widget.track!.path)), autoStart: false);
+  //   }
+  // }
 
   void play() {
-    if (isPlaying) {
-      widget.player.pause();
-    } else {
-      widget.player.play();
-    }
-    setState(() {
-      isPlaying = !isPlaying;
-    });
+    // if (isPlaying) {
+    //   widget.player.pause();
+    // } else {
+    //   widget.player.play();
+    // }
+    // setState(() {
+    //   isPlaying = !isPlaying;
+    // });
   }
 
   @override
@@ -46,9 +43,9 @@ class _PlayerControlBarState extends State<PlayerControlBar> {
           const SizedBox(height: 10),
           Column(
             children: [
-              Text('${Media.file(File(widget.track.path), parse: true).metas['title']}',
+              Text(track != null ? track!.name : 'Unknown',
                   style: const TextStyle(color: Palette.white, fontSize: 16, fontWeight: FontWeight.w700)),
-              Text('${Media.file(File(widget.track.path), parse: true).metas['artist']}',
+              Text(track != null ? track!.author : 'Unknown',
                   style: const TextStyle(color: Palette.white, fontSize: 14, fontWeight: FontWeight.w400)),
             ],
           ),
