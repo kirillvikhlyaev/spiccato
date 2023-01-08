@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 import 'package:dart_vlc/dart_vlc.dart';
 import 'package:desktop_drop/desktop_drop.dart';
+import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:spiccato/models/track.dart';
@@ -22,6 +23,41 @@ class PlayerPage extends StatelessWidget {
     final watcher = context.watch<PlayerProvider>();
 
     final track = watcher.currentTrack;
+
+    Widget listOrText() {
+      if (watcher.playlist.isEmpty) {
+        return Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: DottedBorder(
+            color: Palette.white.withOpacity(0.3),
+            borderType: BorderType.RRect,
+            radius: const Radius.circular(16.0),
+            dashPattern: [8, 6],
+            strokeWidth: 4,
+            child: Center(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: const [
+                  Icon(
+                    Icons.download_outlined,
+                    color: Palette.white,
+                    size: 46,
+                  ),
+                  Text(
+                    'Drop some music',
+                    style: TextStyle(color: Palette.white, fontSize: 24, fontFamily: 'IBM'),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      } else {
+        return ListOfTracks(
+          tracks: watcher.playlist,
+        );
+      }
+    }
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.end,
@@ -61,9 +97,7 @@ class PlayerPage extends StatelessWidget {
                     ),
                   ),
                 )
-              : ListOfTracks(
-                  tracks: watcher.playlist,
-                ),
+              : listOrText(),
         )),
         Container(
           color: Color.alphaBlend(Palette.primary400.withOpacity(0.1), Palette.background400),

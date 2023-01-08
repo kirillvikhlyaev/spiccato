@@ -6,11 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:spiccato/models/track.dart';
 
 class PlayerProvider with ChangeNotifier {
-  final List<Track> playlist = [
-    Track(path: 'E:/05. Паника в селе.mp3'),
-    Track(path: 'E:/06. Истинный убийца.mp3'),
-    Track(path: 'E:/07. Лесник.mp3'),
-  ];
+  final List<Track> playlist = [];
 
   Track? _currentTrack;
 
