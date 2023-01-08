@@ -1,5 +1,7 @@
 import 'dart:io';
+import 'dart:math';
 
+import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 import 'package:dart_vlc/dart_vlc.dart';
 import 'package:desktop_drop/desktop_drop.dart';
 import 'package:flutter/material.dart';
@@ -67,8 +69,20 @@ class PlayerPage extends StatelessWidget {
           color: Color.alphaBlend(Palette.primary400.withOpacity(0.1), Palette.background400),
           child: Column(
             children: [
-              //Слайдер
-              const SizedBox(height: 10),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                child: ProgressBar(
+                  onSeek: (value) => reader.seek(to: value),
+                  progress: watcher.currentPositionTime,
+                  total: watcher.currentDurationTime,
+                  timeLabelTextStyle: TextStyle(color: Palette.white, fontFamily: 'IBM'),
+                  thumbGlowRadius: 0.0,
+                  progressBarColor: Palette.primary400,
+                  baseBarColor: Palette.primary400.withOpacity(0.3),
+                  thumbColor: Palette.primary400,
+                  timeLabelType: TimeLabelType.remainingTime,
+                ),
+              ),
               Column(
                 children: [
                   Text(track != null ? track!.name : 'Unknown',

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:dart_vlc/dart_vlc.dart';
@@ -16,6 +17,9 @@ class PlayerProvider with ChangeNotifier {
   bool _isPlaying = false;
 
   bool _isDragging = false;
+
+  Duration currentPositionTime = Duration.zero;
+  Duration currentDurationTime = Duration.zero;
 
   final player = Player(id: 69420);
 
@@ -42,7 +46,6 @@ class PlayerProvider with ChangeNotifier {
 
   void toggleIsPlaying() {
     _isPlaying = !_isPlaying;
-
     notifyListeners();
   }
 
@@ -59,18 +62,30 @@ class PlayerProvider with ChangeNotifier {
     }
 
     _currentTrack = track;
+    player.open(Media.file(File(_currentTrack!.path)), autoStart: false);
     notifyListeners();
   }
+
+  Timer? timer;
 
   void playOrPause() {
     if (_isPlaying) {
       player.pause();
+      timer?.cancel;
       toggleIsPlaying();
     } else {
-      player.open(Media.file(File(_currentTrack!.path)));
       player.play();
+      timer = Timer.periodic(const Duration(seconds: 1), (_) => _getTime());
+      currentDurationTime = player.position.duration!;
       toggleIsPlaying();
     }
+  }
+
+  void _getTime() {
+    currentDurationTime = player.position.duration!;
+    currentPositionTime = player.position.position!;
+
+    notifyListeners();
   }
 
   void prevTrack() {
@@ -113,6 +128,10 @@ class PlayerProvider with ChangeNotifier {
 
       notifyListeners();
     }
+  }
+
+  void seek({required Duration to}) {
+    player.seek(to);
   }
 
   Track? get currentTrack => _currentTrack;
