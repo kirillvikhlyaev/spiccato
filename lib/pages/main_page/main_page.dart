@@ -1,4 +1,5 @@
 import 'package:bitsdojo_window/bitsdojo_window.dart';
+import 'package:desktop_drop/desktop_drop.dart';
 import 'package:flutter/material.dart';
 import 'package:spiccato/pages/favorites_page/favorites_page.dart';
 import 'package:spiccato/pages/history_page/history_page.dart';
@@ -32,9 +33,8 @@ class _MainPageState extends State<MainPage> {
   }
 
   final _pages = <Widget>[
-    PlayerPage(),
-    FavoritesPage(),
-    HistoryPage(),
+    DropTarget(child: PlayerPage()),
+    const FavoritesPage(),
   ];
 
   @override
@@ -66,11 +66,6 @@ class _MainPageState extends State<MainPage> {
                       icon: Icon(Icons.favorite_outline),
                       selectedIcon: Icon(Icons.favorite),
                       label: Text('Избранные'),
-                    ),
-                    NavigationRailDestination(
-                      icon: Icon(Icons.download_outlined),
-                      selectedIcon: Icon(Icons.download),
-                      label: Text('Импортировать'),
                     )
                   ],
                   trailing: Expanded(

@@ -16,15 +16,52 @@ class PlayerPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // context.read<PlayerProvider>().addTracksToPlaylist(tracks);
-    final track = context.watch<PlayerProvider>().currentTrack;
+    final reader = context.read<PlayerProvider>();
+    final watcher = context.watch<PlayerProvider>();
+
+    final track = watcher.currentTrack;
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
         Expanded(
-            child: ListOfTracks(
-          tracks: context.watch<PlayerProvider>().playlist,
+            child: DropTarget(
+          onDragDone: (details) {
+            for (final file in details.files) {
+              reader.addTracksToPlaylist(Track(path: file.path));
+            }
+          },
+          onDragEntered: (_) => reader.toggleIsDragging(),
+          onDragExited: (_) => reader.toggleIsDragging(),
+          child: watcher.isDragging
+              ? Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Palette.background700.withOpacity(0.7),
+                      borderRadius: BorderRadius.circular(16.0),
+                    ),
+                    child: Center(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: const [
+                          Icon(
+                            Icons.download_outlined,
+                            color: Palette.white,
+                            size: 46,
+                          ),
+                          Text(
+                            'Drop some music',
+                            style: TextStyle(color: Palette.white, fontSize: 24, fontFamily: 'IBM'),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                )
+              : ListOfTracks(
+                  tracks: watcher.playlist,
+                ),
         )),
         Container(
           color: Color.alphaBlend(Palette.primary400.withOpacity(0.1), Palette.background400),
@@ -48,7 +85,7 @@ class PlayerPage extends StatelessWidget {
                     width: 50,
                     height: 50,
                     child: IconButton(
-                      onPressed: () => track != null ? context.read<PlayerProvider>().prevTrack() : null,
+                      onPressed: () => track != null ? reader.prevTrack() : null,
                       icon: const Icon(
                         Icons.skip_previous_rounded,
                         color: Palette.primary200,
@@ -61,9 +98,9 @@ class PlayerPage extends StatelessWidget {
                     width: 50,
                     height: 50,
                     child: IconButton(
-                      onPressed: () => track != null ? context.read<PlayerProvider>().playOrPause() : null,
+                      onPressed: () => track != null ? reader.playOrPause() : null,
                       icon: Icon(
-                        context.watch<PlayerProvider>().isPlaying ? Icons.pause_rounded : Icons.play_arrow_rounded,
+                        watcher.isPlaying ? Icons.pause_rounded : Icons.play_arrow_rounded,
                         color: Palette.primary200,
                         size: 32,
                       ),
@@ -74,7 +111,7 @@ class PlayerPage extends StatelessWidget {
                     width: 50,
                     height: 50,
                     child: IconButton(
-                      onPressed: () => track != null ? context.read<PlayerProvider>().nextTrack() : null,
+                      onPressed: () => track != null ? reader.nextTrack() : null,
                       icon: const Icon(
                         Icons.skip_next_rounded,
                         color: Palette.primary200,

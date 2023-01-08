@@ -15,6 +15,8 @@ class PlayerProvider with ChangeNotifier {
 
   bool _isPlaying = false;
 
+  bool _isDragging = false;
+
   final player = Player(id: 69420);
 
   void addTracksToPlaylist(Track tracks) {
@@ -40,6 +42,12 @@ class PlayerProvider with ChangeNotifier {
 
   void toggleIsPlaying() {
     _isPlaying = !_isPlaying;
+
+    notifyListeners();
+  }
+
+  void toggleIsDragging() {
+    _isDragging = !_isDragging;
 
     notifyListeners();
   }
@@ -109,4 +117,5 @@ class PlayerProvider with ChangeNotifier {
 
   Track? get currentTrack => _currentTrack;
   bool get isPlaying => _isPlaying;
+  bool get isDragging => _isDragging;
 }
